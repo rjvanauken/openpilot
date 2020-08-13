@@ -774,6 +774,7 @@ void ui_draw_rect(NVGcontext *vg, float x, float y, float w, float h, NVGpaint &
   nvgFill(vg);
 }
 
+#ifndef QCOM2
 #ifdef NANOVG_GL3_IMPLEMENTATION
 static const char frame_vertex_shader[] =
   "#version 150 core\n"
@@ -813,6 +814,7 @@ static const char frame_fragment_shader[] =
   "void main() {\n"
   "  gl_FragColor = texture2D(uTexture, vTexCoord.xy);\n"
   "}\n";
+#endif
 #endif
 
 static const mat4 device_transform = {{
@@ -881,6 +883,7 @@ void ui_nvg_init(UIState *s) {
   }
 
   // init gl
+#ifndef QCOM2
   s->frame_program = load_program(frame_vertex_shader, frame_fragment_shader);
   assert(s->frame_program);
 
@@ -889,6 +892,7 @@ void ui_nvg_init(UIState *s) {
 
   s->frame_texture_loc = glGetUniformLocation(s->frame_program, "uTexture");
   s->frame_transform_loc = glGetUniformLocation(s->frame_program, "uTransform");
+#endif
 
   glViewport(0, 0, s->fb_w, s->fb_h);
 
